@@ -13,8 +13,9 @@ private:
 	static const double lowest_legal_temp = -70.0;
 	static const double highest_legal_temp = 130.0;
 public:
+	tempSensor();
 	tempSensor(int ID, bool status, int sense_interval, double temperature);
-	double getTemp() const;
+	void printData() const;
 	
 };
 

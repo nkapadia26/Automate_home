@@ -1,6 +1,6 @@
 
-output: main.o Sensor.o tempSensor.o lightSensor.o windowSensor.o
-	g++ main.o Sensor.o tempSensor.o lightSensor.o windowSensor.o -o output
+output: main.o Sensor.o tempSensor.o lightSensor.o windowSensor.o doorSensor.o fireSensor.o Parser.o
+	g++ main.o Sensor.o tempSensor.o lightSensor.o windowSensor.o doorSensor.o fireSensor.o Parser.o -o output
 
 main.o: main.cpp
 	g++ -c main.cpp
@@ -16,6 +16,15 @@ lightSensor.o: lightSensor.cpp lightSensor.h
 
 windowSensor.o: windowSensor.cpp windowSensor.h
 	g++ -c windowSensor.cpp
+
+doorSensor.o: doorSensor.cpp doorSensor.h
+	g++ -c doorSensor.cpp
+
+fireSensor.o: fireSensor.cpp fireSensor.h
+	g++ -c fireSensor.cpp
+
+Parser.o: Parser.cpp Parser.h
+	g++ -c Parser.cpp
 
 clean:
 	rm *.o output

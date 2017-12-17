@@ -15,6 +15,4 @@ Sensor::Sensor(int ID, bool status, int sense_interval) {
 	this->status = status;
 	this->sense_interval = sense_interval;
 }
-void Sensor::getData() const {
-	cout << "Sensor Data -- " << "ID: " << ID << ", STATUS: " << status << ", SenseInterval: " << sense_interval << endl;
-}
+

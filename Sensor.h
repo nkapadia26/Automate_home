@@ -14,8 +14,7 @@ protected:
 public:
 	Sensor();
 	Sensor(int ID, bool status, int sense_interval);
-	void getData() const;
-	// parser method -- virtual ??
+	virtual void printData() const = 0;
 	
 };
 
