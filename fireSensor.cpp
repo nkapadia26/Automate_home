@@ -15,7 +15,7 @@ fireSensor::fireSensor(int ID, bool status, int sense_interval, bool triggered) 
 }
 
 void fireSensor::printData() const {
-        cout << "Sensor Data -- " << "ID: " << ID << ", STATUS: " << status << ", SenseInterval: " << sense_interval <<
+        cout << "Fire Sensor Data -- " << "ID: " << ID << ", STATUS: " << status << ", SenseInterval: " << sense_interval <<
                 " -- triggered: " << triggered << endl;
 }
 

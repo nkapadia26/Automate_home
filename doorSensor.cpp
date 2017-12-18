@@ -14,7 +14,7 @@ doorSensor::doorSensor(int ID, bool status, int sense_interval, bool locked) :
 }
 
 void doorSensor::printData() const {
-	cout << "Sensor Data -- " << "ID: " << ID << ", STATUS: " << status << ", SenseInterval: " << sense_interval <<
+	cout << "Door Sensor Data -- " << "ID: " << ID << ", STATUS: " << status << ", SenseInterval: " << sense_interval <<
                 " -- locked: " << locked <<  endl;
 }
 

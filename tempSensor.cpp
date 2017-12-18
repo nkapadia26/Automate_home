@@ -15,7 +15,7 @@ tempSensor::tempSensor(int ID, bool status, int sense_interval, double temperatu
 }
 
 void tempSensor::printData() const {
-        cout << "Sensor Data -- " << "ID: " << ID << ", STATUS: " << status << ", SenseInterval: " << sense_interval <<
+        cout << "Temperature Sensor Data -- " << "ID: " << ID << ", STATUS: " << status << ", SenseInterval: " << sense_interval <<
 		" -- temperature " << temperature << endl;
 }
 

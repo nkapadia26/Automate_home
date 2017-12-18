@@ -15,7 +15,7 @@ lightSensor::lightSensor(int ID, bool status, int sense_interval, double luminen
 }
 
 void lightSensor::printData() const {
-       cout << "Sensor Data -- " << "ID: " << ID << ", STATUS: " << status << ", SenseInterval: " << sense_interval <<
+       cout << "Light Sensor Data -- " << "ID: " << ID << ", STATUS: " << status << ", SenseInterval: " << sense_interval <<
 		" -- luminence: " << luminence << endl;
 }
 

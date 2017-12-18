@@ -15,7 +15,7 @@ windowSensor::windowSensor(int ID, bool status, int sense_interval, int open_lev
 }
 
 void windowSensor::printData() const {
-	cout << "Sensor Data -- " << "ID: " << ID << ", STATUS: " << status << ", SenseInterval: " << sense_interval <<
+	cout << "Window Sensor Data -- " << "ID: " << ID << ", STATUS: " << status << ", SenseInterval: " << sense_interval <<
 		"-- open_level " << open_level << endl;
 }
 
