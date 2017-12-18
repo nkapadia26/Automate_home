@@ -15,20 +15,20 @@ int main() {
 	Parser p1;
 	p1.parse_file();
 	
-/*	tempSensor ts1(2, 1, 100, 70.0);
+	tempSensor ts2(2, 1, 100, 70.0);
 	ts1.printData();
 	
-	lightSensor ls1(3, 1, 50, 30.3);
+	lightSensor ls2(3, 1, 50, 30.3);
 	ls1.printData();
 	
-	windowSensor ws1(4, 1, 60, 3);
+	windowSensor ws2(4, 1, 60, 3);
         ws1.printData();
 
-	doorSensor ds1; //(5, 1, 120, 1);
+	doorSensor ds2; //(5, 1, 120, 1);
 	ds1.printData();
 
-	fireSensor fs1;
+	fireSensor fs2;
 	fs1.printData();        
-*/
+
 	return 0;
 } 
