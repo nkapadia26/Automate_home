@@ -1,0 +1,5 @@
+Luminence_Reading: 1 1 80 33.0  
+Temperature_Reading: 1 1 100 80.0 
+Window_Sensor_Reading: 1 1 100 3
+Door_Sensor_Reading: 1 1 120 0
+Fire_Sensor_Reading: 1 1 120 0 
