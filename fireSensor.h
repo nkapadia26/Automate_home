@@ -14,7 +14,7 @@ public:
         fireSensor();
         fireSensor(int ID, bool status, int sense_interval, bool triggered);
         void printData() const;
-
+	friend class Parser;
 };
 
 #endif

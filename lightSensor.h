@@ -14,6 +14,7 @@ public:
 	lightSensor();
 	lightSensor(int ID, bool status, int sense_interval, double luminence);
 	void printData() const;
+	friend class Parser;
 };
 
 #endif

@@ -14,6 +14,7 @@ public:
         doorSensor();
 	doorSensor(int ID, bool status, int sense_interval, bool locked);
         void printData() const;
+	friend class Parser;
 };
 
 #endif

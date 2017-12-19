@@ -14,6 +14,7 @@ public:
 	windowSensor();
 	windowSensor(int ID, bool status, int sense_interval, int open_level);
 	void printData() const;
+	friend class Parser;
 };
 
 #endif
