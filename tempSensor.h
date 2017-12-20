@@ -16,7 +16,7 @@ public:
 	tempSensor();
 	tempSensor(int ID, bool status, int sense_interval, double temperature);
 	void printData() const;
-	
+	friend class Parser;	
 };
 
 #endif
