@@ -13,19 +13,8 @@ using namespace std;
 
 int main() {
 	Parser p1;
-	cout << "Size of the home is: " << p1.get_grid_size().first << " X " << p1.get_grid_size().second << " rooms" << endl;
- 
-	tempSensor ts1 = p1.getTempData(0, 0);
-	ts1.printData();
-	lightSensor ls1 = p1.getLightData(0,0);
-	ls1.printData();
-	doorSensor ds1 = p1.getDoorData(0, 0);
-        ts1.printData();
-        windowSensor ws1 = p1.getWindowData(0,0);
-        ws1.printData();
-	fireSensor fs1 = p1.getFireData(0,0);
-	fs1.printData();
-
+	p1.parse_file();
+	
 	cout << endl << endl;
 	tempSensor ts2(2, 1, 100, 70.0);
 	ts2.printData();

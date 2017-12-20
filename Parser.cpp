@@ -15,11 +15,12 @@ Five 2D dynamic arrays used to store the sensor readings -- each for the corresp
 #include "windowSensor.h"
 #include "doorSensor.h"
 #include "fireSensor.h"
-#include <utility>
+
 using namespace std;
 
-//The class constructor, although unusually long, allocates the object-variables 
-Parser::Parser() {
+Parser::Parser() {};
+
+void Parser::parse_file() {
 	string reading_type;
 	ifstream input_file;
 	input_file.open("sensor_readings.txt");
@@ -102,7 +103,7 @@ Parser::Parser() {
 	}
 */
 	// deleting the allocated arrays		
-/*	for(int i = 0; i < grid_size_x; i++)
+	for(int i = 0; i < grid_size_x; i++)
 	{
 		delete [] temperature_readings[grid_size_x];
 		delete [] luminence_readings[grid_size_x];
@@ -115,31 +116,5 @@ Parser::Parser() {
 	delete [] window_readings;
 	delete [] door_readings;
 	delete [] fire_readings;
-*/
 }
-
-tempSensor Parser::getTempData(int x_coord, int y_coord) {
-	return temperature_readings[x_coord][y_coord];
-}
-
-lightSensor Parser::getLightData(int x_coord, int y_coord) {
-        return luminence_readings[x_coord][y_coord];
-}
-
-doorSensor Parser::getDoorData(int x_coord, int y_coord) {
-        return door_readings[x_coord][y_coord];
-}
-
-windowSensor Parser::getWindowData(int x_coord, int y_coord) {
-        return window_readings[x_coord][y_coord];
-}
-
-fireSensor Parser::getFireData(int x_coord, int y_coord) {
-	return fire_readings[x_coord][y_coord];
-}
-
-pair<int, int> Parser::get_grid_size() {
-        return make_pair(grid_size_x, grid_size_y);
-} 
-
 

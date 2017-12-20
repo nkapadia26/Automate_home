@@ -10,8 +10,7 @@
 #include "windowSensor.h"
 #include "doorSensor.h"
 #include "fireSensor.h"
-#include <utility>
-#include <string>
+
 using namespace std;
 
 class Parser {
@@ -27,12 +26,7 @@ private:
 
 public:
 	Parser();
-	pair<int, int> get_grid_size();
-	tempSensor getTempData(int x_coord, int y_coord);
-	lightSensor getLightData(int x_coord, int y_coord);
-	doorSensor getDoorData(int x_coord, int y_coord);
-	windowSensor getWindowData(int x_coord, int y_coord);
-	fireSensor getFireData(int x_coord, int y_coord);
+	void parse_file();	
 }; 
 
 #endif
