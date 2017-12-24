@@ -9,8 +9,8 @@ lightSensor::lightSensor() : Sensor() {
 	luminence = 10.0;
 }
 
-lightSensor::lightSensor(int ID, bool status, int sense_interval, double luminence1) :
-                Sensor(ID, status, sense_interval) {
+lightSensor::lightSensor(int ID, bool status, double luminence1) :
+                Sensor(ID, status) {
         luminence = luminence1;
 }
 

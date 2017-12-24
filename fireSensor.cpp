@@ -9,13 +9,13 @@ fireSensor::fireSensor() : Sensor() {
        triggered = 0;
 }
 
-fireSensor::fireSensor(int ID, bool status, int sense_interval, bool triggered) :
-                Sensor(ID, status, sense_interval) {
+fireSensor::fireSensor(int ID, bool status, bool triggered) :
+                Sensor(ID, status) {
         this->triggered = triggered;
 }
 
 void fireSensor::printData() const {
-        cout << "Fire Sensor Data -- " << "ID: " << ID << ", STATUS: " << status << ", SenseInterval: " << sense_interval <<
+        cout << "Fire Sensor Data -- " << "ID: " << ID << ", STATUS: " << status << 
                 " -- triggered: " << triggered << endl;
 }
 

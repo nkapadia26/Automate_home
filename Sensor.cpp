@@ -8,11 +8,9 @@ using namespace std;
 Sensor::Sensor() {
 	ID = 0;
 	status = 1;
-	sense_interval = 10;
 }
-Sensor::Sensor(int ID, bool status, int sense_interval) {
+Sensor::Sensor(int ID, bool status) {
 	this->ID = ID;
 	this->status = status;
-	this->sense_interval = sense_interval;
 }
 

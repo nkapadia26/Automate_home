@@ -8,8 +8,8 @@ using namespace std;
 doorSensor::doorSensor() : Sensor() {
 	locked = 0;
 }
-doorSensor::doorSensor(int ID, bool status, int sense_interval, bool locked) :
-                Sensor (ID, status, sense_interval) {
+doorSensor::doorSensor(int ID, bool status, bool locked) :
+                Sensor (ID, status) {
         this->locked = locked;
 }
 

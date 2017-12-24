@@ -1,5 +1,6 @@
-4 5
+4 5 90.0 40.0
 1 2 Luminence_Reading: 1 1 80 33.0  
+0 0 Occupancy_Reading: 1 1 100 0
 0 4 Temperature_Reading: 1 1 100 80.0 
 3 0 Window_Sensor_Reading: 1 1 100 3
 2 3 Door_Sensor_Reading: 1 1 120 0

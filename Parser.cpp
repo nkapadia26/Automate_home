@@ -8,18 +8,13 @@ Five 2D dynamic arrays used to store the sensor readings -- each for the corresp
 #include <fstream>
 #include <string>
 #include <stdlib.h>
-#include <sstream>
 #include "Parser.h"
-#include "tempSensor.h"
-#include "lightSensor.h"
-#include "windowSensor.h"
-#include "doorSensor.h"
-#include "fireSensor.h"
+#include "Env.h"
 #include <utility>
 using namespace std;
 
-//The class constructor, although unusually long, allocates the object-variables 
-Parser::Parser() {
+Parser::Parser() {};
+Env Parser::readFile() {
 	string reading_type;
 	ifstream input_file;
 	input_file.open("sensor_readings.txt");
@@ -27,66 +22,62 @@ Parser::Parser() {
 	bool temp_bool1, temp_bool2;
 	double temp_double;
 	
-	input_file >> grid_size_x >> grid_size_y; // reading in the 2D grid size
-	temperature_readings = new tempSensor*[grid_size_x];
-	luminence_readings = new lightSensor*[grid_size_x];
-	door_readings = new doorSensor*[grid_size_x];
-	window_readings = new windowSensor*[grid_size_x];
-	fire_readings = new fireSensor*[grid_size_x];	
-	for(int i = 0; i < grid_size_x; i++) {
-	    temperature_readings[i] = new tempSensor[grid_size_y];
-	    luminence_readings[i] = new lightSensor[grid_size_y];
-	    window_readings[i] = new windowSensor[grid_size_y];
-	    door_readings[i] = new doorSensor[grid_size_y];
-	    fire_readings[i] = new fireSensor[grid_size_y]; 
-	}
-
+	input_file >> temp_int1 >> temp_int2; // reading in the 2D grid size
+	Env env(temp_int1, temp_int2);	
+ 	input_file >> env.outside_temperature >> env.sunlight;	
 	while (input_file) { 
 		input_file >> coord_x >> coord_y;
 		input_file >> reading_type;
-		if (!input_file){
+		if (!input_file) {
 			break;
 		}
 		if (reading_type.compare("Temperature_Reading:") == 0) {
 			input_file >> temp_int1; input_file >> temp_bool1; input_file >> temp_int2; input_file >> temp_double;
-			temperature_readings[coord_x][coord_y].ID = temp_int1;
-			temperature_readings[coord_x][coord_y].status = temp_bool1;
-			temperature_readings[coord_x][coord_y].sense_interval = temp_int2; 
-			temperature_readings[coord_x][coord_y].temperature = temp_double;
-			temperature_readings[coord_x][coord_y].printData();
+			env.temperature_readings[coord_x][coord_y].ID = temp_int1;
+			env.temperature_readings[coord_x][coord_y].status = temp_bool1;
+			//env.temperature_readings[coord_x][coord_y].sense_interval = temp_int2; 
+			env.temperature_readings[coord_x][coord_y].temperature = temp_double;
+			env.temperature_readings[coord_x][coord_y].printData();
 		}
 		else if (reading_type.compare("Luminence_Reading:") == 0) {
                         input_file >> temp_int1; input_file >> temp_bool1; input_file >> temp_int2; input_file >> temp_double;	
-			luminence_readings[coord_x][coord_y].ID = temp_int1;
-                        luminence_readings[coord_x][coord_y].status = temp_bool1;
-                        luminence_readings[coord_x][coord_y].sense_interval = temp_int2;
-                        luminence_readings[coord_x][coord_y].luminence = temp_double;
-                        luminence_readings[coord_x][coord_y].printData();
+			env.luminence_readings[coord_x][coord_y].ID = temp_int1;
+                        env.luminence_readings[coord_x][coord_y].status = temp_bool1;
+                       // env.luminence_readings[coord_x][coord_y].sense_interval = temp_int2;
+                        env.luminence_readings[coord_x][coord_y].luminence = temp_double;
+                        env.luminence_readings[coord_x][coord_y].printData();
                 }
 		else if (reading_type.compare("Fire_Sensor_Reading:") == 0) {
                         input_file >> temp_int1; input_file >> temp_bool1; input_file >> temp_int2; input_file >> temp_bool2;
-			fire_readings[coord_x][coord_y].ID = temp_int1;
-                        fire_readings[coord_x][coord_y].status = temp_bool1;
-                        fire_readings[coord_x][coord_y].sense_interval = temp_int2;
-                        fire_readings[coord_x][coord_y].triggered = temp_bool2;
-                        fire_readings[coord_x][coord_y].printData();
+			env.fire_readings[coord_x][coord_y].ID = temp_int1;
+                        env.fire_readings[coord_x][coord_y].status = temp_bool1;
+                        //env.fire_readings[coord_x][coord_y].sense_interval = temp_int2;
+                        env.fire_readings[coord_x][coord_y].triggered = temp_bool2;
+                        env.fire_readings[coord_x][coord_y].printData();
                 }
 		else if (reading_type.compare("Door_Sensor_Reading:") == 0) {
                         input_file >> temp_int1; input_file >> temp_bool1; input_file >> temp_int2; input_file >> temp_bool2;
-			door_readings[coord_x][coord_y].ID = temp_int1;
-                        door_readings[coord_x][coord_y].status = temp_bool1;
-                        door_readings[coord_x][coord_y].sense_interval = temp_int2;
-                        door_readings[coord_x][coord_y].locked = temp_bool2;
-                        door_readings[coord_x][coord_y].printData();
+			env.door_readings[coord_x][coord_y].ID = temp_int1;
+                        env.door_readings[coord_x][coord_y].status = temp_bool1;
+                       // env.door_readings[coord_x][coord_y].sense_interval = temp_int2;
+                        env.door_readings[coord_x][coord_y].locked = temp_bool2;
+                        env.door_readings[coord_x][coord_y].printData();
                 }
 		else if (reading_type.compare("Window_Sensor_Reading:") == 0) {
                         input_file >> temp_int1; input_file >> temp_bool1; input_file >> temp_int2; input_file >> temp_int3;
-			window_readings[coord_x][coord_y].ID = temp_int1;
-                        window_readings[coord_x][coord_y].status = temp_bool1;
-                        window_readings[coord_x][coord_y].sense_interval = temp_int2;
-                        window_readings[coord_x][coord_y].open_level = temp_int3;
-                        window_readings[coord_x][coord_y].printData();
+			env.window_readings[coord_x][coord_y].ID = temp_int1;
+                        env.window_readings[coord_x][coord_y].status = temp_bool1;
+                        //env.window_readings[coord_x][coord_y].sense_interval = temp_int2;
+                        env.window_readings[coord_x][coord_y].open_level = temp_int3;
+                        env.window_readings[coord_x][coord_y].printData();
                 }
+		else if (reading_type.compare("Occupancy_Reading:") == 0) {
+                         input_file >> temp_int1; input_file >> temp_bool1; input_file >> temp_int2; input_file >> temp_bool2;
+                         env.occupancy_readings[coord_x][coord_y].ID = temp_int1;
+                         env.occupancy_readings[coord_x][coord_y].status = temp_bool1;
+                         env.occupancy_readings[coord_x][coord_y].occupied = temp_bool2;
+                         env.occupancy_readings[coord_x][coord_y].printData();
+                 }
 		else {
 			cout << "ERROR: Type of sensor reading not recognized" << endl;
 			exit(1);
@@ -101,45 +92,8 @@ Parser::Parser() {
 		} cout << endl;
 	}
 */
-	// deleting the allocated arrays		
-/*	for(int i = 0; i < grid_size_x; i++)
-	{
-		delete [] temperature_readings[grid_size_x];
-		delete [] luminence_readings[grid_size_x];
-		delete [] window_readings[grid_size_x];
-		delete [] door_readings[grid_size_x];
-		delete [] fire_readings[grid_size_x];
-	}
-	delete [] temperature_readings;
-	delete [] luminence_readings;
-	delete [] window_readings;
-	delete [] door_readings;
-	delete [] fire_readings;
-*/
+	return env;
 }
 
-tempSensor Parser::getTempData(int x_coord, int y_coord) {
-	return temperature_readings[x_coord][y_coord];
-}
-
-lightSensor Parser::getLightData(int x_coord, int y_coord) {
-        return luminence_readings[x_coord][y_coord];
-}
-
-doorSensor Parser::getDoorData(int x_coord, int y_coord) {
-        return door_readings[x_coord][y_coord];
-}
-
-windowSensor Parser::getWindowData(int x_coord, int y_coord) {
-        return window_readings[x_coord][y_coord];
-}
-
-fireSensor Parser::getFireData(int x_coord, int y_coord) {
-	return fire_readings[x_coord][y_coord];
-}
-
-pair<int, int> Parser::get_grid_size() {
-        return make_pair(grid_size_x, grid_size_y);
-} 
 
 

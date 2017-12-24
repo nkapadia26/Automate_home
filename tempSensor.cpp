@@ -9,8 +9,8 @@ tempSensor::tempSensor() : Sensor() {
 	temperature = 70.0;
 }
 
-tempSensor::tempSensor(int ID, bool status, int sense_interval, double temperature1) : 
-        	Sensor(ID, status, sense_interval) {
+tempSensor::tempSensor(int ID, bool status, double temperature1) : 
+        	Sensor(ID, status) {
 	temperature = temperature1;
 }
 
