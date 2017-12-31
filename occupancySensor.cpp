@@ -6,16 +6,25 @@
 using namespace std;
 
 occupancySensor::occupancySensor() : Sensor() {
-       occupied = 0;
+       _occupied = 0;
 }
 
 occupancySensor::occupancySensor(int ID, bool status, bool occupied) :
                 Sensor(ID, status) {
-        this->occupied = occupied;
+        _occupied = occupied;
 }
 
+void occupancySensor::setOccupancy(bool occupied) {
+	_occupied = occupied;
+}
+
+bool occupancySensor::getOccupancy() {
+	return _occupied;
+}
+
+
 void occupancySensor::printData() const {
-        cout << "Occupancy Sensor Data -- " << "ID: " << ID << ", STATUS: " << status <<
-                " -- occupied: " << occupied << endl;
+        cout << "Occupancy Sensor Data -- " << "ID: " << _ID << ", STATUS: " << _status <<
+                " -- occupied: " << _occupied << endl;
 }
 

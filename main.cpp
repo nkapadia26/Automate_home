@@ -1,6 +1,7 @@
 // --- main.cpp ---
 
 #include <iostream>
+/*
 #include "Sensor.h"
 #include "tempSensor.h"
 #include "lightSensor.h"
@@ -8,45 +9,54 @@
 #include "doorSensor.h"
 #include "fireSensor.h"
 #include "occupancySensor.h"
+*/
 #include "Parser.h"
 #include "Env.h"
-
+#include "Controller.h"
+#include "userSettings.h"
+#include "controllerGrid.h"
 using namespace std;
 
+void printStatus(int x_coord, int y_coord, Env* env, userSettings* us, controllerGrid* cg);
+
 int main() {
-	Parser p1;
-	Env env = p1.readFile();
+	Env env;
+	Parser p1(&env);
+	p1.readFile();
 	cout << "Size of the home is: " << env.getGridSize().first << " X " << env.getGridSize().second << " rooms" << endl;
 	cout << "Outside Temperature: " << env.getOutsideTemp() << "  Sunlight level: " << env.getSunlight() << endl;
  
-	tempSensor ts1 = env.getTempData(0, 0);
-	ts1.printData();
-	lightSensor ls1 = env.getLightData(0,0);
-	ls1.printData();
-	doorSensor ds1 = env.getDoorData(0, 0);
-        ts1.printData();
-        windowSensor ws1 = env.getWindowData(0,0);
-        ws1.printData();
-	fireSensor fs1 = env.getFireData(0,0);
-	fs1.printData();
-	occupancySensor os1 = env.getOccData(0,0);
-	os1.printData();	
-
-	cout << endl << endl;
-	tempSensor ts2(2, 1, 70.0);
-	ts2.printData();
+	userSettings us1(env);
+	us1.readFile();
 	
-	lightSensor ls2(3, 1, 30.3);
-	ls2.printData();
-	
-	windowSensor ws2(4, 1, 3, 4);
-        ws2.printData();
+	int x = 1; int y = 2;
+	controllerGrid cg(env.getGridSize().first, env.getGridSize().second, &env, &us1);
+	cg.initializeGrid();
+//	printStatus(x, y, &env, &us1, &cg); // -- env, controller and userSettings before control-actions	
+	cg.converge();	
 
-	doorSensor ds2; //(5, 1, 120, 1);
-	ds2.printData();
+//	printStatus(x, y, &env, &us1, &cg); // -- env, controller and userSettings before control-actions
 
-	fireSensor fs2;
-	fs2.printData();        
+//	delete &env;	
 
 	return 0;
 } 
+
+void printStatus(int x_coord, int y_coord, Env* env, userSettings* us, controllerGrid* cg) {
+	cout << "user settings -- Luminence/Temperature " << us->getLuminence(x_coord, y_coord) << "/" << us->getTemperature(x_coord,y_coord) << endl;	
+	cout << " Environment -- ";
+	cout << endl << "Sunlight: " << env->getSunlight();
+        cout << endl << "Outside Temperature: " << env->getOutsideTemp();
+        cout << endl << "Temperature: " << env->getTempData(x_coord, y_coord).getTemp();
+        cout << endl << "Luminence: " << env->getLightData(x_coord, y_coord).getLuminence() ;
+        cout << endl << "Locked: " << env->getDoorData(x_coord, y_coord).getDoor();
+        cout << endl << "Blind level: " << env->getWindowData(x_coord, y_coord).getBlindLevel();
+        cout << endl << "Window Open Level: " << env->getWindowData(x_coord, y_coord).getOpenLevel();
+        cout << endl << "Fire triggered: " << env->getFireData(x_coord, y_coord).getTrigger();
+        cout << endl << "Occupied: " << env->getOccData(x_coord, y_coord).getOccupancy() << endl;
+
+	cout << " Controller outputs -- " << endl;
+	cout << "Heat level: " << cg->getElement(x_coord, y_coord).getHeatLevel() << endl;
+	cout << "Lighting level: " << cg->getElement(x_coord, y_coord).getLightingLevel() << endl;
+	cout << "Water ON: " << cg->getElement(x_coord, y_coord).getWaterOn() << endl;	
+}

@@ -8,8 +8,8 @@ using namespace std;
 
 class Sensor {
 protected:
-	int ID;
-	bool status; // up: 1  OR  down: 0
+	int _ID;
+	bool _status; // up: 1  OR  down: 0
 public:
 	Sensor();
 	Sensor(int ID, bool status);

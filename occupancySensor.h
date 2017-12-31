@@ -9,11 +9,13 @@ using namespace std;
 
 class occupancySensor : public Sensor {
 private:
-        bool occupied;
+        bool _occupied;
 	// NO sense_interval -- event based invocation
 public:
         occupancySensor();
         occupancySensor(int ID, bool status, bool occupied);
+	void setOccupancy(bool occupied);
+	bool getOccupancy();
         void printData() const;
 	friend class Parser;
 	friend class Env;

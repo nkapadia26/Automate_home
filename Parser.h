@@ -6,14 +6,17 @@
 //#include <iostream>
 //#include <fstream>
 //#include <utility>
-#include "Env.h"
 
 using namespace std;
 
+class Env;
+
 class Parser {
+private:
+	Env* _env;
 public:
-	Parser();
-	Env readFile();
+	Parser(Env* env); 
+	void readFile();
 }; 
 
 #endif

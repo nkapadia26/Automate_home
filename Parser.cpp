@@ -13,18 +13,19 @@ Five 2D dynamic arrays used to store the sensor readings -- each for the corresp
 #include <utility>
 using namespace std;
 
-Parser::Parser() {};
-Env Parser::readFile() {
+Parser::Parser(Env* env) {
+	_env = env;
+}
+void Parser::readFile() {
 	string reading_type;
 	ifstream input_file;
 	input_file.open("sensor_readings.txt");
-	int temp_int1, temp_int2, temp_int3, coord_x, coord_y;
+	int temp_int1, temp_int2, temp_int3, temp_int4, coord_x, coord_y;
 	bool temp_bool1, temp_bool2;
 	double temp_double;
 	
-	input_file >> temp_int1 >> temp_int2; // reading in the 2D grid size
-	Env env(temp_int1, temp_int2);	
- 	input_file >> env.outside_temperature >> env.sunlight;	
+//	input_file >> _env->_grid_size_x >> _env->_grid_size_y; // reading in the 2D grid size
+ 	input_file >> _env->_outside_temperature >> _env->_sunlight;	
 	while (input_file) { 
 		input_file >> coord_x >> coord_y;
 		input_file >> reading_type;
@@ -33,50 +34,46 @@ Env Parser::readFile() {
 		}
 		if (reading_type.compare("Temperature_Reading:") == 0) {
 			input_file >> temp_int1; input_file >> temp_bool1; input_file >> temp_int2; input_file >> temp_double;
-			env.temperature_readings[coord_x][coord_y].ID = temp_int1;
-			env.temperature_readings[coord_x][coord_y].status = temp_bool1;
-			//env.temperature_readings[coord_x][coord_y].sense_interval = temp_int2; 
-			env.temperature_readings[coord_x][coord_y].temperature = temp_double;
-			env.temperature_readings[coord_x][coord_y].printData();
+			_env->_temperature_readings[coord_x][coord_y]._ID = temp_int1;
+			_env->_temperature_readings[coord_x][coord_y]._status = temp_bool1;
+			_env->_temperature_readings[coord_x][coord_y]._temperature = temp_double;
+//			_env->_temperature_readings[coord_x][coord_y].printData();
 		}
 		else if (reading_type.compare("Luminence_Reading:") == 0) {
                         input_file >> temp_int1; input_file >> temp_bool1; input_file >> temp_int2; input_file >> temp_double;	
-			env.luminence_readings[coord_x][coord_y].ID = temp_int1;
-                        env.luminence_readings[coord_x][coord_y].status = temp_bool1;
-                       // env.luminence_readings[coord_x][coord_y].sense_interval = temp_int2;
-                        env.luminence_readings[coord_x][coord_y].luminence = temp_double;
-                        env.luminence_readings[coord_x][coord_y].printData();
+			_env->_luminence_readings[coord_x][coord_y]._ID = temp_int1;
+                        _env->_luminence_readings[coord_x][coord_y]._status = temp_bool1;
+                        _env->_luminence_readings[coord_x][coord_y]._luminence = temp_double;
+  //                      _env->_luminence_readings[coord_x][coord_y].printData();
                 }
 		else if (reading_type.compare("Fire_Sensor_Reading:") == 0) {
                         input_file >> temp_int1; input_file >> temp_bool1; input_file >> temp_int2; input_file >> temp_bool2;
-			env.fire_readings[coord_x][coord_y].ID = temp_int1;
-                        env.fire_readings[coord_x][coord_y].status = temp_bool1;
-                        //env.fire_readings[coord_x][coord_y].sense_interval = temp_int2;
-                        env.fire_readings[coord_x][coord_y].triggered = temp_bool2;
-                        env.fire_readings[coord_x][coord_y].printData();
+			_env->_fire_readings[coord_x][coord_y]._ID = temp_int1;
+                        _env->_fire_readings[coord_x][coord_y]._status = temp_bool1;
+                        _env->_fire_readings[coord_x][coord_y]._triggered = temp_bool2;
+    //                    _env->_fire_readings[coord_x][coord_y].printData();
                 }
 		else if (reading_type.compare("Door_Sensor_Reading:") == 0) {
                         input_file >> temp_int1; input_file >> temp_bool1; input_file >> temp_int2; input_file >> temp_bool2;
-			env.door_readings[coord_x][coord_y].ID = temp_int1;
-                        env.door_readings[coord_x][coord_y].status = temp_bool1;
-                       // env.door_readings[coord_x][coord_y].sense_interval = temp_int2;
-                        env.door_readings[coord_x][coord_y].locked = temp_bool2;
-                        env.door_readings[coord_x][coord_y].printData();
+			_env->_door_readings[coord_x][coord_y]._ID = temp_int1;
+                        _env->_door_readings[coord_x][coord_y]._status = temp_bool1;
+                        _env->_door_readings[coord_x][coord_y]._locked = temp_bool2;
+      //                  _env->_door_readings[coord_x][coord_y].printData();
                 }
 		else if (reading_type.compare("Window_Sensor_Reading:") == 0) {
-                        input_file >> temp_int1; input_file >> temp_bool1; input_file >> temp_int2; input_file >> temp_int3;
-			env.window_readings[coord_x][coord_y].ID = temp_int1;
-                        env.window_readings[coord_x][coord_y].status = temp_bool1;
-                        //env.window_readings[coord_x][coord_y].sense_interval = temp_int2;
-                        env.window_readings[coord_x][coord_y].open_level = temp_int3;
-                        env.window_readings[coord_x][coord_y].printData();
+                        input_file >> temp_int1; input_file >> temp_bool1; input_file >> temp_int2; input_file >> temp_int3 >> temp_int4;
+			_env->_window_readings[coord_x][coord_y]._ID = temp_int1;
+                        _env->_window_readings[coord_x][coord_y]._status = temp_bool1;
+                        _env->_window_readings[coord_x][coord_y]._open_level = temp_int3;
+                        _env->_window_readings[coord_x][coord_y]._blind_level = temp_int4;
+        //                _env->_window_readings[coord_x][coord_y].printData();
                 }
 		else if (reading_type.compare("Occupancy_Reading:") == 0) {
                          input_file >> temp_int1; input_file >> temp_bool1; input_file >> temp_int2; input_file >> temp_bool2;
-                         env.occupancy_readings[coord_x][coord_y].ID = temp_int1;
-                         env.occupancy_readings[coord_x][coord_y].status = temp_bool1;
-                         env.occupancy_readings[coord_x][coord_y].occupied = temp_bool2;
-                         env.occupancy_readings[coord_x][coord_y].printData();
+                         _env->_occupancy_readings[coord_x][coord_y]._ID = temp_int1;
+                         _env->_occupancy_readings[coord_x][coord_y]._status = temp_bool1;
+                         _env->_occupancy_readings[coord_x][coord_y]._occupied = temp_bool2;
+          //               _env->_occupancy_readings[coord_x][coord_y].printData();
                  }
 		else {
 			cout << "ERROR: Type of sensor reading not recognized" << endl;
@@ -92,7 +89,6 @@ Env Parser::readFile() {
 		} cout << endl;
 	}
 */
-	return env;
 }
 
 

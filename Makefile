@@ -1,6 +1,6 @@
 
-output: main.o Sensor.o tempSensor.o lightSensor.o windowSensor.o doorSensor.o fireSensor.o occupancySensor.o Parser.o Env.o Controller.o
-	g++ main.o Sensor.o tempSensor.o lightSensor.o windowSensor.o doorSensor.o fireSensor.o occupancySensor.o Parser.o Env.o Controller.o -o output
+output: main.o Sensor.o tempSensor.o lightSensor.o windowSensor.o doorSensor.o fireSensor.o occupancySensor.o Parser.o Env.o Controller.o userSettings.o controllerGrid.o
+	g++ main.o Sensor.o tempSensor.o lightSensor.o windowSensor.o doorSensor.o fireSensor.o occupancySensor.o Parser.o Env.o Controller.o userSettings.o controllerGrid.o -o output
 
 main.o: main.cpp
 	g++ -c main.cpp
@@ -34,6 +34,12 @@ Env.o: Env.cpp Env.h
 
 Controller.o: Controller.cpp Controller.h
 	g++ -c Controller.cpp
+
+userSettings.o: userSettings.cpp userSettings.h
+	g++ -c userSettings.cpp
+
+controllerGrid.o: controllerGrid.cpp controllerGrid.h
+	g++ -c controllerGrid.cpp
 
 clean:
 	rm *.o output

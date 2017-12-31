@@ -1,32 +1,81 @@
 // --- Controller.cpp ---
 
 #include <iostream>
-//#include "userSettings.h"
+#include "Env.h"
+#include "userSettings.h"
 #include "Controller.h"
 #include "math.h"
 #include <stdlib.h>
 using namespace std;
 
-Controller::Controller() {
-      water_on = 0;
-      heat_level = 0;
-      window_level = 0;
-      blind_level = 0;
-      lighting_level = 0;
-      door_close = 0;
+Controller::Controller() {}
+/*
+Controller::Controller(Env* env, userSettings* us) {
+      _water_on = 0;
+      _heat_level = 0;
+      _lighting_level = 0;
+      env = env;
+      us = us;
+}*/
+/*
+Controller::Controller(int x, int y, Env* env, userSettings* us) {
+      _water_on = 0;
+      _heat_level = 0;
+      _lighting_level = 0;
+      x_coord = x;
+      y_coord = y;
+      env = env;
+      us = us;
+}
+*/
+void Controller::varInitialize(int x_coord, int y_coord, Env* env, userSettings* us) {
+	cout << " initial heat_level and lighting_level should reflect initial env " << endl;
+	
+	double curr_luminence;
+	int blind_level, sunlight;
+	curr_luminence = env->getLightData(x_coord, y_coord).getLuminence();
+	blind_level = env->getWindowData(x_coord, y_coord).getBlindLevel();
+	sunlight = env->getSunlight();
+	curr_luminence = curr_luminence - sunlight*blind_level*0.1; // this comes from lighting_level
+	_lighting_level = max(round(curr_luminence/20.0), 0.0); // -- one level corresponds to 20 lumens
+	
+	int window_level;
+        double outside_temp, curr_temp, eff_diff;
+        window_level = env->getWindowData(x_coord, y_coord).getOpenLevel();
+        outside_temp = env->getOutsideTemp();
+        curr_temp = env->getTempData(x_coord, y_coord).getTemp();
+	// -- Each level of window opening erases 10% of temperature-differential
+	eff_diff = (curr_temp - outside_temp) + window_level*0.1*(curr_temp - outside_temp);
+	// -- each level of heating (+ve or -ve) can maintain a temperature-differential (inside/outside) of additional 10.0 degrees F
+	// eff_diff that the heat_level has to mitigate
+	_heat_level = round(eff_diff/10.0);
+	if ((_heat_level > 9) || (_heat_level < -9)) 
+		cout << "Warning: Controller::_heat_level initialized to an extreme level " << _heat_level << endl;	
+
+	// -- water_on will initialize to 0
+	_water_on = 0;
+	cout << "controller settings: " << _lighting_level << " " << _heat_level << " " << _water_on << endl;
 }
 
-void Controller::setLightLevel(double sunlight, double& curr_luminence, double user_setting, bool occupied) {
+void Controller::setLightLevel(int x_coord, int y_coord, Env* env, userSettings* us) {
 	// lets assume sunlight adds 50% of its luminence to the room when fully open blind (level 5)
 	// And, with every level lower than that, luminence reduces by 10%
 	// Also, for every higher light_level, luminence increases by 20.0 lumens  
 	// As, we can not deliver continuous values of luminence, the resulting luminence would generally not be exactly equal to user_setting	
-	double difference;
+	double difference, user_setting, curr_luminence, sunlight;
+	bool occupied;
+	int blind_level;
+	user_setting = us->getLuminence(x_coord, y_coord);
+	curr_luminence = env->getLightData(x_coord, y_coord).getLuminence();
+	occupied = env->getOccData(x_coord, y_coord).getOccupancy();
+	blind_level = env->getWindowData(x_coord, y_coord).getBlindLevel();
+	sunlight = env->getSunlight();
+
 	difference = user_setting - curr_luminence;
 
 	if (!occupied) {
 		blind_level = 0;
-		curr_luminence = low_luminence;
+		curr_luminence = _low_luminence;
 	}
 	else { // someone in the room
 		int reqd_blind_move = 0;	
@@ -44,19 +93,36 @@ void Controller::setLightLevel(double sunlight, double& curr_luminence, double u
 		curr_luminence = curr_luminence + (difference - new_difference); //luminence updated after blind movement
 		if (new_difference != 0) { // -- we need to adjust the lighting_level also
 			int new_lighting_level;
-			new_lighting_level = lighting_level + (int) round(new_difference/20.0);
-			curr_luminence = curr_luminence + 20.0*(new_lighting_level - lighting_level);
-			lighting_level = new_lighting_level;
+			new_lighting_level = _lighting_level + (int) round(new_difference/20.0);
+			curr_luminence = curr_luminence + 20.0*(new_lighting_level - _lighting_level);
+			_lighting_level = new_lighting_level;
 		}
 	} // end else
+	// update the env variables that result from the controller actions
+	env->getWindowData(x_coord, y_coord).setBlindLevel(blind_level);
+	env->getLightData(x_coord, y_coord).setLuminence(curr_luminence);
+cout << x_coord << " grid coords-1 " << y_coord << " light " << _lighting_level << endl;
 }// end method
 
 // -- Lets assume that each level of heating (+ve or -ve) can maintain a temperature-differential (inside/outside) of additional 10.0 degrees F
 // -- We want to use the window to save heating/cooling energy 
 // -- Each level of window opening erases 10% of temperature-differential
-void Controller::calcHeatLevel(double outside_temp, double& curr_temp, double user_setting, bool occupied) {
+void Controller::calcHeatLevel(int x_coord, int y_coord, Env* env, userSettings* us) {
+	int window_level;
+	double outside_temp, curr_temp, user_setting;
+	bool occupied;
+	window_level = env->getWindowData(x_coord, y_coord).getOpenLevel();
+	outside_temp = env->getOutsideTemp();
+	curr_temp = env->getTempData(x_coord, y_coord).getTemp();
+	user_setting = us->getTemperature(x_coord, y_coord);
+	occupied = env->getOccData(x_coord, y_coord).getOccupancy();
+
 	if (!occupied) {
-		user_setting = low_temperature;
+		if (outside_temp < _low_temperature)
+			user_setting = _low_temperature;
+		else if (outside_temp > _high_temperature)
+			user_setting = _high_temperature;
+		else user_setting = outside_temp;
 	}			
 	double io_differential, target_differential;  int window_move;
 	io_differential = outside_temp - curr_temp;
@@ -68,12 +134,12 @@ void Controller::calcHeatLevel(double outside_temp, double& curr_temp, double us
 		// update differentials
 		io_differential = outside_temp - curr_temp;
 	        target_differential = user_setting - curr_temp;
-		heat_level = heat_level + (int) round(target_differential/10.0);
+		_heat_level = _heat_level + (int) round(target_differential/10.0);
 		curr_temp = curr_temp + round(target_differential/10.0)*10.0;
 	}
 	else { // -- both diffs are not of the same sign 
 		// -- adjust heat_level first and window later
-		heat_level = heat_level + (int) round(target_differential/10.0);
+		_heat_level = _heat_level + (int) round(target_differential/10.0);
 		curr_temp = curr_temp + round(target_differential/10.0)*10.0;
 		// update differentials
 		io_differential = outside_temp - curr_temp;
@@ -84,14 +150,29 @@ void Controller::calcHeatLevel(double outside_temp, double& curr_temp, double us
 		window_level = window_level + window_move;
 		curr_temp = curr_temp + window_move*0.1*io_differential;
 	}
+	// update the env member variables -- closing Env-Controller loop
+	env->getWindowData(x_coord, y_coord).setOpenLevel(window_level);
+	env->getTempData(x_coord, y_coord).setTemp(curr_temp);
+	
+cout << x_coord << " grid coords-2 " << y_coord << " heat " << _heat_level << endl;
 }// end method
 
-void Controller::doorLocking (bool occupied) {
-	if (!occupied) 
-		door_close = 1;
+void Controller::doorLocking(int x_coord, int y_coord, Env* env, userSettings* us) {
+	bool occupied, door_locked;
+	occupied = env->getOccData(x_coord, y_coord).getOccupancy();
+	door_locked = env->getDoorData(x_coord, y_coord).getDoor();	
+	if (!occupied && !door_locked) {
+		env->getDoorData(x_coord, y_coord).setDoor(1);
+	}
+//cout << x_coord << " grid coords-3 " << y_coord << "--water " << _water_on << " heat " << _heat_level << " window " << _window_level << " blind " << _blind_level << " light " << _lighting_level << " lock " << _door_close << endl;
 }
 
-void Controller::waterOn (bool triggered) {
-	if (triggered)
-		water_on = 1;
+void Controller::waterOn(int x_coord, int y_coord, Env* env, userSettings* us) {
+	bool triggered;
+	triggered = env->getFireData(x_coord, y_coord).getTrigger();
+	if (triggered) {
+		_water_on = 1;
+		env->getFireData(x_coord, y_coord).setTrigger(1);
+	}
+cout << x_coord << " grid coords-4 " << y_coord << "--water " << _water_on << endl;
 }

@@ -9,38 +9,50 @@
 #include <iostream>
 #include <fstream>
 
+class Env;
+
+class userSettings;
+
 class Controller {
 private:
-	bool water_on; // --  1 or 0
-	int heat_level; // -- -9,..., -3, -2, -1, 0, 1, 2, 3, ..., 9
-	int window_level; // -- 0 to 5	
-	int blind_level; // -- 0 to 5
-	int lighting_level; // -- 0 to 5
-	bool door_close; // force door shut
-	static const double low_luminence = 10.0; // used when room unoccupied
-	static const double low_temperature = 64.0;
+	bool _water_on; // --  1 or 0
+	int _heat_level; // -- -9,..., -3, -2, -1, 0, 1, 2, 3, ..., 9
+	int _lighting_level; // -- 0 to 5
+	static const double _low_luminence = 10.0; // used when room unoccupied
+	static const double _low_temperature = 60.0;
+	static const double _high_temperature = 85.0;
+//	Env* _env;
+//	userSettings* _us;
 public:
 	Controller();
-	inline void setWaterOn(bool water_on) { this->water_on = water_on; }
+//	Controller(Env* env, userSettings* us);
+//	Controller(int x, int y, Env* env, userSettings* us);
+	inline void setWaterOn(bool water_on) { _water_on = water_on; }
+	inline bool getWaterOn() { return _water_on; }
 	inline void setHeatLevel(int level) { 
-		heat_level = level;
+		_heat_level = level;
 	}
-	inline void setWindowLevel(int window_level) { this->window_level = window_level; } 	
-	inline void setLightingLevel(int lighting_level) { this->lighting_level = lighting_level; }
-	inline void forceDoor(bool door_close) { this->door_close = door_close; }
-	inline void setBlindLevel(int blind_level) { this->blind_level = blind_level; }
-	
+	inline int getHeatLevel() { return _heat_level; }
+//	inline void setWindowLevel(int window_level) { _window_level = window_level; } 	
+	inline void setLightingLevel(int lighting_level) { _lighting_level = lighting_level; }
+//	inline int getWindowLevel() { return _window_level; } 	
+	inline int getLightingLevel() { return _lighting_level; }
+//	inline void forceDoor(bool door_close) { _door_close = door_close; }
+//	inline void setBlindLevel(int blind_level) { _blind_level = blind_level; }
+//	inline bool getDoor() { return _door_close; }
+//	inline int getBlindLevel() { return _blind_level; }
 	// -- calculate new blind_level and calculate new lighting_level for target luminence (user_setting)
 	//-- also, calculate resulting luminence
-	void setLightLevel(double sunlight, double& curr_luminence, double user_setting, bool occupied); 
+	void setLightLevel(int x, int y, Env* env, userSettings* us); 
 
 	// -- Although temperature does not change instantaneously, here, we set the curr_temp in evironment for the next cyclic period
 	// Temperature value in the environment will settle to a value close to the target supposedly by the end of the contol-cycle period
 	// We calculate the window level and the heat_level for the target temperature-setting
-	void calcHeatLevel(double outside_temp, double& curr_temp, double user_setting, bool occupied);
+	void calcHeatLevel(int x, int y, Env* env, userSettings* us);
 	
-        void doorLocking (bool occupied);
-        void waterOn (bool triggered);
+        void doorLocking (int x, int y, Env* env, userSettings* us);
+        void waterOn (int x, int y, Env* env, userSettings* us);
+	void varInitialize(int x, int y, Env* env, userSettings* us);
 };
 
 #endif

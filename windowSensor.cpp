@@ -6,18 +6,23 @@
 using namespace std;
 
 windowSensor::windowSensor() : Sensor() {
-	open_level = 0;
-	blind_level = 0;
+	_open_level = 0;
+	_blind_level = 0;
 }
 
 windowSensor::windowSensor(int ID, bool status, int open_level, int blind_level) :
 		Sensor (ID, status) {
-	this->open_level = open_level;
-	this->blind_level = blind_level;
+	_open_level = open_level;
+	_blind_level = blind_level;
 }
 
+void windowSensor::setOpenLevel(int open_level) { _open_level = open_level; }
+void windowSensor::setBlindLevel(int blind_level)  { _blind_level = blind_level; }
+int windowSensor::getOpenLevel() { return _open_level; }
+int windowSensor::getBlindLevel() { return _blind_level; }
+
 void windowSensor::printData() const {
-	cout << "Window Sensor Data -- " << "ID: " << ID << ", STATUS: " << status << ", SenseInterval: " << sense_interval <<
-		"-- open_level " << open_level << ", blind_level " << blind_level << endl;
+	cout << "Window Sensor Data -- " << "ID: " << _ID << ", STATUS: " << _status << ", SenseInterval: " << _sense_interval <<
+		"-- open_level " << _open_level << ", blind_level " << _blind_level << endl;
 }
 

@@ -23,19 +23,20 @@ using namespace std;
 class Env {
 private:
         // variables to store the 2D grid of sensor readings
-        tempSensor** temperature_readings;
-        lightSensor** luminence_readings;
-        doorSensor** door_readings;
-        windowSensor** window_readings;
-        fireSensor** fire_readings;
-	occupancySensor** occupancy_readings;
-        int grid_size_x;
-        int grid_size_y;
-	double outside_temperature; // in F
-	double sunlight; // in terms of luminence
-	unsigned int curr_time; //-- in minutes -- simulation starts at 0
+        tempSensor** _temperature_readings;
+        lightSensor**_luminence_readings;
+        doorSensor** _door_readings;
+        windowSensor** _window_readings;
+        fireSensor** _fire_readings;
+	occupancySensor** _occupancy_readings;
+        int _grid_size_x;
+        int _grid_size_y;
+	double _outside_temperature; // in F
+	double _sunlight; // in terms of luminence
+	unsigned int _curr_time; //-- in minutes -- simulation starts at 0
 public:
-        Env(int grid_size_x, int grid_size_y);
+//        Env(int grid_size_x, int grid_size_y);
+	Env();
         pair<int, int> getGridSize();
 	double getSunlight();
 	double getOutsideTemp();
@@ -46,6 +47,18 @@ public:
         fireSensor getFireData(int x_coord, int y_coord);
 	occupancySensor getOccData(int x_coord, int y_coord);
 	unsigned int getTime();
+
+	void setSunlight(double);
+        void setOutsideTemp(double);
+        void setTempData(int x_coord, int y_coord, double);
+        void setLightData(int x_coord, int y_coord, double);
+        void setDoorData(int x_coord, int y_coord, bool);
+        void setBlindData(int x_coord, int y_coord, int);
+        void setWindowData(int x_coord, int y_coord, int);
+        void setFireData(int x_coord, int y_coord, bool);
+        void setOccData(int x_coord, int y_coord, bool);
+        void setTime(unsigned int);
+
 	friend class Parser;
 	friend class Controller;
 };

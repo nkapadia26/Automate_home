@@ -11,32 +11,47 @@
 
 class userSettings {
 private:
-	double** temperature_grid;
-	double** luminence_grid;
+	double** _temperature_grid;
+	double** _luminence_grid;
+	int _x_dim;
+	int _y_dim;
 public:
-	inline userSettings::userSettings(Env env) {
-		int x_dim, y_dim;
-		x_dim = env.getGridSize().first; 
-		y_dim = env.getGridSize().second;
-		temperature_grid = new double*[x_dim];
-		luminenece_grid = new double*[x_dim];
-		for(int i = 0; i < x_dim; i++) {
-	 	       temperature_grid[i] = new double[y_dim];
-		       luminence_grid[i] = new double[y_dim];
+	inline userSettings(Env env) {
+	//	int x_dim, y_dim;
+		this->_x_dim = env.getGridSize().first; 
+		this->_y_dim = env.getGridSize().second;
+		_temperature_grid = new double*[_x_dim];
+		_luminence_grid = new double*[_x_dim];
+		for(int i = 0; i < _x_dim; i++) {
+	 	       _temperature_grid[i] = new double[_y_dim];
+		       _luminence_grid[i] = new double[_y_dim];
 		}
 	}
-	
+
+/*	inline ~userSettings() {         
+	      for(int i = 0; i < x_dim; i++) {
+	              delete [] temperature_grid[x_dim];
+        	      delete [] luminence_grid[x_dim];
+       	      }
+              delete [] temperature_grid;
+              delete [] luminence_grid;
+	}
+*/	
 	inline double getTemperature(int x_coord, int y_coord) const {
-		this->temperature_grid[x_coord][y_coord];
+		return this->_temperature_grid[x_coord][y_coord];
 	}
 	inline double getLuminence(int x_coord, int y_coord) const {
-                this->luminence_grid[x_coord][y_coord];
+                return this->_luminence_grid[x_coord][y_coord];
         }
 	inline void setTemperature(int x_coord, int y_coord, double value) {
-                this->temperature_grid[x_coord][y_coord] = value;
+                this->_temperature_grid[x_coord][y_coord] = value;
         }
         inline void setLuminence(int x_coord, int y_coord, double value) {
-                this->luminence_grid[x_coord][y_coord] = value;
+                this->_luminence_grid[x_coord][y_coord] = value;
         }
+	void readFile();
+	void printSettings();
 	//friend class Controller;
 };
+
+#endif
