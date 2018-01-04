@@ -29,7 +29,7 @@ Controller::Controller(int x, int y, Env* env, userSettings* us) {
 }
 */
 void Controller::varInitialize(int x_coord, int y_coord, Env* env, userSettings* us) {
-	cout << " initial heat_level and lighting_level should reflect initial env " << endl;
+	//cout << " initial heat_level and lighting_level should reflect initial env " << endl;
 	
 	double curr_luminence;
 	int blind_level, sunlight;
@@ -54,7 +54,7 @@ void Controller::varInitialize(int x_coord, int y_coord, Env* env, userSettings*
 
 	// -- water_on will initialize to 0
 	_water_on = 0;
-	cout << "controller settings: " << _lighting_level << " " << _heat_level << " " << _water_on << endl;
+	//cout << "controller settings: " << _lighting_level << " " << _heat_level << " " << _water_on << endl;
 }
 
 void Controller::setLightLevel(int x_coord, int y_coord, Env* env, userSettings* us) {
@@ -99,9 +99,14 @@ void Controller::setLightLevel(int x_coord, int y_coord, Env* env, userSettings*
 		}
 	} // end else
 	// update the env variables that result from the controller actions
-	env->getWindowData(x_coord, y_coord).setBlindLevel(blind_level);
-	env->getLightData(x_coord, y_coord).setLuminence(curr_luminence);
-cout << x_coord << " grid coords-1 " << y_coord << " light " << _lighting_level << endl;
+	env->setBlindData(x_coord, y_coord, blind_level);
+	env->setLightData(x_coord, y_coord, curr_luminence);
+	if ((x_coord == 1) && (y_coord == 2)) {
+                cout << " lighting level " << _lighting_level << endl;
+		cout << "blind_level: " << env->getWindowData(x_coord, y_coord).getBlindLevel();
+       		cout << "  luminence: " <<  env->getLightData(x_coord, y_coord).getLuminence() << endl;
+		cout << " blind_level and curr_luminence: " << blind_level << " " << curr_luminence << endl << endl; 
+	}
 }// end method
 
 // -- Lets assume that each level of heating (+ve or -ve) can maintain a temperature-differential (inside/outside) of additional 10.0 degrees F
@@ -151,10 +156,15 @@ void Controller::calcHeatLevel(int x_coord, int y_coord, Env* env, userSettings*
 		curr_temp = curr_temp + window_move*0.1*io_differential;
 	}
 	// update the env member variables -- closing Env-Controller loop
-	env->getWindowData(x_coord, y_coord).setOpenLevel(window_level);
-	env->getTempData(x_coord, y_coord).setTemp(curr_temp);
+	env->setWindowData(x_coord, y_coord, window_level);
+	env->setTempData(x_coord, y_coord, curr_temp);
 	
-cout << x_coord << " grid coords-2 " << y_coord << " heat " << _heat_level << endl;
+	if ((x_coord == 1) && (y_coord == 2)) {
+		cout << " -- heat level: " << _heat_level << endl;
+		cout << " env-temp " << env->getTempData(x_coord, y_coord).getTemp();
+		cout << "  env- open level " <<  env->getWindowData(x_coord, y_coord).getOpenLevel() << endl;
+		cout << " window_level and curr_temp: " << window_level << " " << curr_temp << endl << endl;
+	}
 }// end method
 
 void Controller::doorLocking(int x_coord, int y_coord, Env* env, userSettings* us) {
@@ -162,9 +172,11 @@ void Controller::doorLocking(int x_coord, int y_coord, Env* env, userSettings* u
 	occupied = env->getOccData(x_coord, y_coord).getOccupancy();
 	door_locked = env->getDoorData(x_coord, y_coord).getDoor();	
 	if (!occupied && !door_locked) {
-		env->getDoorData(x_coord, y_coord).setDoor(1);
+		env->setDoorData(x_coord, y_coord, 1);
 	}
-//cout << x_coord << " grid coords-3 " << y_coord << "--water " << _water_on << " heat " << _heat_level << " window " << _window_level << " blind " << _blind_level << " light " << _lighting_level << " lock " << _door_close << endl;
+	if ((x_coord == 1) && (y_coord == 2)) {
+		cout << "env-door-locked " << env->getDoorData(x_coord, y_coord).getDoor() << endl << endl;
+	}	
 }
 
 void Controller::waterOn(int x_coord, int y_coord, Env* env, userSettings* us) {
@@ -172,7 +184,10 @@ void Controller::waterOn(int x_coord, int y_coord, Env* env, userSettings* us) {
 	triggered = env->getFireData(x_coord, y_coord).getTrigger();
 	if (triggered) {
 		_water_on = 1;
-		env->getFireData(x_coord, y_coord).setTrigger(1);
+		env->setFireData(x_coord, y_coord, 0); // once water is ON, turn off fire-alarm
 	}
-cout << x_coord << " grid coords-4 " << y_coord << "--water " << _water_on << endl;
+	if ((x_coord == 1) && (y_coord == 2)) {
+		cout << " env-fire " << env->getFireData(x_coord, y_coord).getTrigger();
+		cout << " water ON " << _water_on << endl << endl;
+        }		
 }

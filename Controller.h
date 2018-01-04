@@ -1,7 +1,7 @@
 // --- Controller.h ---
 // Controller-actions will determine how the next set of env_variables (sensor-readings) are affected.
 // At each iteration, sensor readings are derived (computed or estimated) from the current env-variables and the controller inputs.
-//  Controller takes actions that attempt to maintain the environment close to the user-settings.
+// Controller takes actions that attempt to maintain the environment close to the user-settings.
 
 #ifndef CONTROLLER_H_
 #define CONTROLLER_H_

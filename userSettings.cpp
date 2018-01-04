@@ -9,7 +9,7 @@
 
 using namespace std;
 
-void userSettings::readFile () {
+void userSettings::readUserSettings() {
 	ifstream in_file;
 	in_file.open("user_settings.txt");
 	

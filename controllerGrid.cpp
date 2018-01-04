@@ -8,15 +8,18 @@
 using namespace std;
 
 controllerGrid::controllerGrid(int x_dim, int y_dim, Env* env, userSettings* us) {
+	_env = env;
+	_us = us;
+        cout << " x-y dims: " << _env->getGridSize().first << " " << _env->getGridSize().second << endl;
 	_control_grid = new Controller*[x_dim];
 	for(int i = 0; i < x_dim; i++) 
 	        _control_grid[i] = new Controller[y_dim];
 }
 
 void controllerGrid::initializeGrid() {
-	int x_dim; x_dim = _env->getGridSize().first;
-	int y_dim; y_dim = _env->getGridSize().second;
-	cout << " x-y dims: " << x_dim << " " << y_dim << endl;
+	int x_dim, y_dim;
+	x_dim = _env->getGridSize().first;
+	y_dim = _env->getGridSize().second;
 	for (int i=0; i<x_dim; i++) {
 		for (int j=0; j<y_dim; j++) {
 			_control_grid[i][j].varInitialize(i, j, _env, _us);	
@@ -25,8 +28,9 @@ void controllerGrid::initializeGrid() {
 }
 
 void controllerGrid::converge() {
-	int x_dim; x_dim = _env->getGridSize().first;
-        int y_dim; y_dim = _env->getGridSize().second;
+	int x_dim, y_dim;
+	x_dim = _env->getGridSize().first;
+        y_dim = _env->getGridSize().second;
 	for (int i=0; i<x_dim; i++) {
                for (int j=0; j<y_dim; j++) {
                        _control_grid[i][j].calcHeatLevel(i, j, _env, _us);

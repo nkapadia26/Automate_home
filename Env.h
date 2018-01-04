@@ -10,12 +10,14 @@
 
 #include <iostream>
 #include <fstream>
+#include "envElement.h"
 #include "tempSensor.h"
 #include "lightSensor.h"
 #include "windowSensor.h"
 #include "doorSensor.h"
 #include "fireSensor.h"
 #include "occupancySensor.h"
+#include <vector>
 #include <utility>
 #include <string>
 using namespace std;
@@ -23,20 +25,16 @@ using namespace std;
 class Env {
 private:
         // variables to store the 2D grid of sensor readings
-        tempSensor** _temperature_readings;
-        lightSensor**_luminence_readings;
-        doorSensor** _door_readings;
-        windowSensor** _window_readings;
-        fireSensor** _fire_readings;
-	occupancySensor** _occupancy_readings;
+//	vector <vector <envElement> > _env_array;
+	envElement** _env_array;
         int _grid_size_x;
         int _grid_size_y;
 	double _outside_temperature; // in F
 	double _sunlight; // in terms of luminence
 	unsigned int _curr_time; //-- in minutes -- simulation starts at 0
 public:
-//        Env(int grid_size_x, int grid_size_y);
 	Env();
+        void allocateEnv(int grid_size_x, int grid_size_y);
         pair<int, int> getGridSize();
 	double getSunlight();
 	double getOutsideTemp();
@@ -60,7 +58,7 @@ public:
         void setTime(unsigned int);
 
 	friend class Parser;
-	friend class Controller;
+	//friend class Controller;
 };
 
 #endif

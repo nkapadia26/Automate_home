@@ -49,7 +49,7 @@ public:
         inline void setLuminence(int x_coord, int y_coord, double value) {
                 this->_luminence_grid[x_coord][y_coord] = value;
         }
-	void readFile();
+	void readUserSettings();
 	void printSettings();
 	//friend class Controller;
 };

@@ -22,20 +22,19 @@ void printStatus(int x_coord, int y_coord, Env* env, userSettings* us, controlle
 int main() {
 	Env env;
 	Parser p1(&env);
-	p1.readFile();
+	p1.readEnv();
 	cout << "Size of the home is: " << env.getGridSize().first << " X " << env.getGridSize().second << " rooms" << endl;
 	cout << "Outside Temperature: " << env.getOutsideTemp() << "  Sunlight level: " << env.getSunlight() << endl;
  
 	userSettings us1(env);
-	us1.readFile();
+	us1.readUserSettings();
 	
 	int x = 1; int y = 2;
 	controllerGrid cg(env.getGridSize().first, env.getGridSize().second, &env, &us1);
 	cg.initializeGrid();
-//	printStatus(x, y, &env, &us1, &cg); // -- env, controller and userSettings before control-actions	
+	printStatus(x, y, &env, &us1, &cg); cout << endl << " -- env, controller and userSettings BEFORE control-actions" << endl << endl;
 	cg.converge();	
-
-//	printStatus(x, y, &env, &us1, &cg); // -- env, controller and userSettings before control-actions
+	printStatus(x, y, &env, &us1, &cg); cout << endl << " -- env, controller and userSettings AFTER control-actions "<< endl;
 
 //	delete &env;	
 

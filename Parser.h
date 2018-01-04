@@ -16,7 +16,7 @@ private:
 	Env* _env;
 public:
 	Parser(Env* env); 
-	void readFile();
+	void readEnv();
 }; 
 
 #endif
