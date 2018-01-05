@@ -11,22 +11,14 @@
 
 class userSettings {
 private:
-	double** _temperature_grid;
-	double** _luminence_grid;
+	vector < vector <double> > _temperature_vec_2d;
+	vector < vector <double> > _luminence_vec_2d;
+	vector <double> *_temperature_grid;
+	vector <double> *_luminence_grid;
 	int _x_dim;
-	int _y_dim;
+	vector <int> _y_dims;
 public:
-	inline userSettings(Env env) {
-	//	int x_dim, y_dim;
-		this->_x_dim = env.getGridSize().first; 
-		this->_y_dim = env.getGridSize().second;
-		_temperature_grid = new double*[_x_dim];
-		_luminence_grid = new double*[_x_dim];
-		for(int i = 0; i < _x_dim; i++) {
-	 	       _temperature_grid[i] = new double[_y_dim];
-		       _luminence_grid[i] = new double[_y_dim];
-		}
-	}
+	userSettings(Env env);
 
 /*	inline ~userSettings() {         
 	      for(int i = 0; i < x_dim; i++) {

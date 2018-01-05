@@ -25,17 +25,18 @@ using namespace std;
 class Env {
 private:
         // variables to store the 2D grid of sensor readings
-//	vector <vector <envElement> > _env_array;
-	envElement** _env_array;
+	vector <vector <envElement> > _env_vec_2d;
+	vector <envElement> *_env_array;
+//	envElement** _env_array;
         int _grid_size_x;
-        int _grid_size_y;
+        vector <int> _grid_y_sizes;
 	double _outside_temperature; // in F
 	double _sunlight; // in terms of luminence
 	unsigned int _curr_time; //-- in minutes -- simulation starts at 0
 public:
 	Env();
-        void allocateEnv(int grid_size_x, int grid_size_y);
-        pair<int, int> getGridSize();
+        void allocateEnv(int grid_size_x, const vector <int> &grid_y_sizes);
+        pair<int, vector <int> > getGridSizes();
 	double getSunlight();
 	double getOutsideTemp();
         tempSensor getTempData(int x_coord, int y_coord);

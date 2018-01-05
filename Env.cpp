@@ -13,20 +13,18 @@ using namespace std;
 Env::Env() {
 	_curr_time = 0;
 }
-void Env::allocateEnv(int grid_size_x, int grid_size_y) {
+void Env::allocateEnv(int grid_size_x, const vector <int> &grid_y_sizes) {
 	_grid_size_x = grid_size_x;
-	_grid_size_y = grid_size_y;
-/*	vector <envElement> *p1;
-	p1 = _env_array.get_allocator().allocate(grid_size_x);
-	vector <envElement> vec(grid_size_y); 	
-//	vector <envElement> *vec_ptr = new vector<envElement>(grid_size_y); 
+	_grid_y_sizes = grid_y_sizes;
+	_env_array = _env_vec_2d.get_allocator().allocate(grid_size_x);
         for (int i=0; i<grid_size_x; i++)
-	        _env_array.get_allocator().construct(&p1[i],vec);
-*/
+	        _env_vec_2d.get_allocator().construct(&_env_array[i], vector <envElement> (grid_y_sizes[i]));
+/*
         _env_array = new envElement*[_grid_size_x];
 	for(int i = 0; i < _grid_size_x; i++) {
             _env_array[i] = new envElement[_grid_size_y];
         }
+*/
 }
 /*
 Env::~Env() {
@@ -62,8 +60,8 @@ occupancySensor Env::getOccData(int x_coord, int y_coord) {
         return _env_array[x_coord][y_coord].getOccElement();
 }
 
-pair<int, int> Env::getGridSize() {
-        return make_pair(_grid_size_x, _grid_size_y);
+pair<int, vector <int> > Env::getGridSizes() {
+        return make_pair(_grid_size_x, _grid_y_sizes);
 }
 
 double Env::getSunlight() {

@@ -16,6 +16,16 @@ using namespace std;
 Parser::Parser(Env* env) {
 	_env = env;
 }
+
+void Parser::dimCheck(int x_coord, int y_coord) {
+	if ((x_coord < _env->_grid_size_x) && (x_coord >= 0) && (y_coord >= 0) && (y_coord < _env->_grid_y_sizes[x_coord]))
+		return;
+	else {
+		cout << " x, y coords of this room " << x_coord << " " << y_coord << " not valid for the given house dimensions " << endl;
+		exit(1);
+	}
+}
+
 void Parser::readEnv() {
 	string reading_type;
 	ifstream input_file;
@@ -24,11 +34,17 @@ void Parser::readEnv() {
 	bool temp_bool1, temp_bool2;
 	double temp_double;
 	
-	input_file >> _env->_grid_size_x >> _env->_grid_size_y; // reading in the 2D grid size
-	_env->allocateEnv(_env->_grid_size_x, _env->_grid_size_y); 
+	// reading in the 2D irregular grid sizes
+	input_file >> _env->_grid_size_x;
+	for (int i=0; i<_env->_grid_size_x; i++) {
+		input_file >> temp_int1;
+		 _env->_grid_y_sizes.push_back(temp_int1); 
+	}
+	_env->allocateEnv(_env->_grid_size_x, _env->_grid_y_sizes); 
 	input_file >> _env->_outside_temperature >> _env->_sunlight;	
 	while (input_file) { 
 		input_file >> coord_x >> coord_y;
+		dimCheck(coord_x, coord_y);
 		input_file >> reading_type;
 		if (!input_file) {
 			break;

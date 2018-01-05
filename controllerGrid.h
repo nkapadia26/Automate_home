@@ -6,17 +6,19 @@
 #define CONTROLLERGRID_H_
 
 #include <iostream>
+#include <vector>
 
 class Env;
 class Controller;
 
 class controllerGrid {
 private:
-	Controller** _control_grid;
+	vector <vector <Controller> > _control_vec_2d; // -- 2d vector
+	vector <Controller> *_control_grid;  // -- pointer used to access the 2d vector
 	Env* _env;
 	userSettings* _us;
 public:
-	controllerGrid(int x_dim, int y_dim, Env* env, userSettings* us);
+	controllerGrid(int x_dim, const vector <int> &y_dims, Env* env, userSettings* us);
 	void initializeGrid(); // calling the initialize method from Controller class
 	void converge(); //-- calling all the Controller methods for all rooms in the grid
 	Controller getElement(int x, int y);

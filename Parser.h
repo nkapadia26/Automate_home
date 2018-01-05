@@ -17,6 +17,7 @@ private:
 public:
 	Parser(Env* env); 
 	void readEnv();
+	void dimCheck(int, int);
 }; 
 
 #endif
