@@ -19,7 +19,8 @@ public:
 	void setTemp(double temp);
 	double getTemp();
 	void printData() const;
-	friend class Parser;	
+	friend class envParser;	
+	friend class layoutParser;
 	friend class Env;
 };
 

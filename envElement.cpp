@@ -9,7 +9,11 @@ Five 2D dynamic arrays used to store the sensor readings -- each for the corresp
 using namespace std;
 
 //The class constructor, although unusually long, allocates the object-variables 
-envElement::envElement() {}
+envElement::envElement() {
+	_leader_room.first = -1;
+	_leader_room.second = -1; // by default, room is valid and self-contained (no leader)
+	_valid_bit = 1;
+}
 tempSensor envElement::getTempElement() {
         return _temperature_reading;
 }
@@ -62,4 +66,19 @@ void envElement::setOccElement(bool occupied) {
 	_occupancy_reading.setOccupancy(occupied);
 }
 
-		
+void envElement::setLeader(int x, int y) {
+	_leader_room.first = x;
+	_leader_room.second = y;
+}
+
+bool envElement::leaderCheck() {
+	return (_leader_room.first < 0)? 0 : 1;
+}
+
+bool envElement::getRoomValidity() {
+	return _valid_bit;
+}		
+
+void envElement::setRoomValidity(bool valid_bit) {
+	_valid_bit = valid_bit;
+}

@@ -19,23 +19,15 @@ void Env::allocateEnv(int grid_size_x, const vector <int> &grid_y_sizes) {
 	_env_array = _env_vec_2d.get_allocator().allocate(grid_size_x);
         for (int i=0; i<grid_size_x; i++)
 	        _env_vec_2d.get_allocator().construct(&_env_array[i], vector <envElement> (grid_y_sizes[i]));
-/*
-        _env_array = new envElement*[_grid_size_x];
-	for(int i = 0; i < _grid_size_x; i++) {
-            _env_array[i] = new envElement[_grid_size_y];
-        }
-*/
 }
-/*
-Env::~Env() {
+
+void Env::deallocateEnv() {
      // cout << "Env destructor: deleting the allocated arrays " << endl;
-      for(int i = 0; i < grid_size_x; i++)
-        {
-                delete [] _env_array[grid_size_x];
-        }
-        delete [] _env_array;
+	for (int i=0; i<_grid_size_x; i++)
+                _env_vec_2d.get_allocator().destroy(&_env_array[i]);
+	_env_vec_2d.get_allocator().deallocate(_env_array, _grid_size_x);
 }
-*/
+
 tempSensor Env::getTempData(int x_coord, int y_coord) {
         return _env_array[x_coord][y_coord].getTempElement();
 }
@@ -109,6 +101,10 @@ void Env::setBlindData(int x_coord, int y_coord, int blind_level) {
 
 void Env::setOccData(int x_coord, int y_coord, bool occupied) {
 	_env_array[x_coord][y_coord].setOccElement(occupied);
+}
+
+envElement Env::getElement(int x, int y) {
+	return _env_array[x][y];
 }
 
 void Env::setTime(unsigned int time) {

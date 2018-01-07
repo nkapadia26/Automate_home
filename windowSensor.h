@@ -20,7 +20,9 @@ public:
 	int getBlindLevel();
 	int getOpenLevel();
 	void printData() const;
-	friend class Parser;
+	friend class envParser;
+        friend class layoutParser;
+//	friend class Parser;
 	friend class Env;	
 };
 

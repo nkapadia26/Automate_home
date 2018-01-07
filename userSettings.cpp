@@ -18,16 +18,16 @@ userSettings::userSettings(Env env) {
 		_temperature_vec_2d.get_allocator().construct(&_temperature_grid[i], vector <double> (_y_dims[i]));
 		_luminence_vec_2d.get_allocator().construct(&_luminence_grid[i], vector <double> (_y_dims[i]));	
 	} 	
-	
-/*         _temperature_grid = new double*[_x_dim];
-         _luminence_grid = new double*[_x_dim];
-         for(int i = 0; i < _x_dim; i++) {
-              _temperature_grid[i] = new double[_y_dim];
-              _luminence_grid[i] = new double[_y_dim];
-         }
-*/
 }
 
+userSettings::~userSettings() {
+	for (int i=0; i<_x_dim; i++) {
+                _temperature_vec_2d.get_allocator().destroy(&_temperature_grid[i]);
+                _luminence_vec_2d.get_allocator().destroy(&_luminence_grid[i]);
+        }
+	_temperature_vec_2d.get_allocator().deallocate(_temperature_grid, _x_dim);
+        _luminence_vec_2d.get_allocator().deallocate(_luminence_grid, _x_dim);
+}
 
 void userSettings::readUserSettings() {
 	ifstream in_file;

@@ -12,12 +12,10 @@ using namespace std;
 class Env;
 
 class Parser {
-private:
+protected:
 	Env* _env;
 public:
 	Parser(Env* env); 
-	void readEnv();
-	void dimCheck(int, int);
 }; 
 
 #endif

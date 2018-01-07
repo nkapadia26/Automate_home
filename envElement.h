@@ -29,6 +29,8 @@ private:
         windowSensor _window_reading;
         fireSensor _fire_reading;
 	occupancySensor _occupancy_reading;      
+	pair <int, int> _leader_room; // -- coords: {-1,-1} if not the leader_room
+	bool _valid_bit; //-- coords of the tile that matters -- if this is the leader room itself or if it is a complete room
 public:
 	envElement();
         tempSensor getTempElement();
@@ -45,8 +47,15 @@ public:
         void setWindowElement(int);
         void setFireElement(bool);
         void setOccElement(bool);
-
-	friend class Parser;
+	
+	void setLeader(int, int);
+	bool leaderCheck(); 
+	bool getRoomValidity();
+	void setRoomValidity(bool);
+  
+	friend class envParser;
+        friend class layoutParser;    
+//	friend class Parser;
 //	friend class Controller;
 };
 

@@ -26,7 +26,7 @@ class Env {
 private:
         // variables to store the 2D grid of sensor readings
 	vector <vector <envElement> > _env_vec_2d;
-	vector <envElement> *_env_array;
+	vector <envElement> *_env_array; // -- variable used to access the 2D vector
 //	envElement** _env_array;
         int _grid_size_x;
         vector <int> _grid_y_sizes;
@@ -36,6 +36,7 @@ private:
 public:
 	Env();
         void allocateEnv(int grid_size_x, const vector <int> &grid_y_sizes);
+	void deallocateEnv();
         pair<int, vector <int> > getGridSizes();
 	double getSunlight();
 	double getOutsideTemp();
@@ -58,7 +59,10 @@ public:
         void setOccData(int x_coord, int y_coord, bool);
         void setTime(unsigned int);
 
-	friend class Parser;
+	envElement getElement(int, int);
+	
+	friend class envParser;
+	friend class layoutParser;
 	//friend class Controller;
 };
 

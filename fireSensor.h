@@ -17,7 +17,9 @@ public:
         void printData() const;
 	bool getTrigger();
 	void setTrigger(bool triggered);
-	friend class Parser;
+	friend class envParser;
+        friend class layoutParser;
+//	friend class Parser;
 	friend class Env;
 };
 

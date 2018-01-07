@@ -17,7 +17,9 @@ public:
 	double getLuminence();
 	void setLuminence(double luminence);
 	void printData() const;
-	friend class Parser;
+	friend class envParser;
+        friend class layoutParser;
+//	friend class Parser;
 	friend class Env;
 };
 

@@ -17,7 +17,9 @@ public:
 	void setOccupancy(bool occupied);
 	bool getOccupancy();
         void printData() const;
-	friend class Parser;
+	friend class envParser;
+        friend class layoutParser;
+//	friend class Parser;
 	friend class Env;
 };
 

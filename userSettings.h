@@ -19,16 +19,7 @@ private:
 	vector <int> _y_dims;
 public:
 	userSettings(Env env);
-
-/*	inline ~userSettings() {         
-	      for(int i = 0; i < x_dim; i++) {
-	              delete [] temperature_grid[x_dim];
-        	      delete [] luminence_grid[x_dim];
-       	      }
-              delete [] temperature_grid;
-              delete [] luminence_grid;
-	}
-*/	
+	~userSettings();
 	inline double getTemperature(int x_coord, int y_coord) const {
 		return this->_temperature_grid[x_coord][y_coord];
 	}

@@ -1,16 +1,8 @@
 // --- main.cpp ---
 
 #include <iostream>
-/*
-#include "Sensor.h"
-#include "tempSensor.h"
-#include "lightSensor.h"
-#include "windowSensor.h"
-#include "doorSensor.h"
-#include "fireSensor.h"
-#include "occupancySensor.h"
-*/
-#include "Parser.h"
+#include "envParser.h"
+#include "layoutParser.h"
 #include "Env.h"
 #include "Controller.h"
 #include "userSettings.h"
@@ -21,10 +13,13 @@ void printStatus(int x_coord, int y_coord, Env* env, userSettings* us, controlle
 
 int main() {
 	Env env;
-	Parser p1(&env);
+	envParser p1(&env);
 	p1.readEnv();
 //	cout << "Size of the home is: " << env.getGridSize().first << " X " << env.getGridSize().second << " rooms" << endl;
 	cout << "Outside Temperature: " << env.getOutsideTemp() << "  Sunlight level: " << env.getSunlight() << endl;
+
+	layoutParser p2(&env);
+	p2.readLayout();	
  
 	userSettings us1(env);
 	us1.readUserSettings();
@@ -32,11 +27,17 @@ int main() {
 	int x = 1; int y = 2;
 	controllerGrid cg(env.getGridSizes().first, env.getGridSizes().second, &env, &us1);
 	cg.initializeGrid();
-	printStatus(x, y, &env, &us1, &cg); cout << endl << " -- env, controller and userSettings BEFORE control-actions" << endl << endl;
+	cout << endl << " -- env, controller and userSettings BEFORE control-actions" << endl << endl;
+	printStatus(x, y, &env, &us1, &cg); 
 	cg.converge();	
-	printStatus(x, y, &env, &us1, &cg); cout << endl << " -- env, controller and userSettings AFTER control-actions "<< endl;
+	cout << endl << " -- env, controller and userSettings AFTER control-actions "<< endl;
+	printStatus(x, y, &env, &us1, &cg); 
+	cg.converge();
 
-//	delete &env;	
+	// -- deallocation --
+//	cg.~controllerGrid();
+//	us1.~userSettings();
+	env.deallocateEnv();
 
 	return 0;
 } 

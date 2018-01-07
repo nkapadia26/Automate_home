@@ -15,11 +15,6 @@ controllerGrid::controllerGrid(int x_dim, const vector <int> &y_dims, Env* env, 
 	for (int i = 0; i < x_dim; i++) {
 		_control_vec_2d.get_allocator().construct(&_control_grid[i], vector <Controller> (y_dims[i]));
 	}
-
-/*	_control_grid = new Controller*[x_dim];
-	for(int i = 0; i < x_dim; i++) 
-	        _control_grid[i] = new Controller[y_dim];
-*/
 }
 
 void controllerGrid::initializeGrid() {
@@ -29,7 +24,8 @@ void controllerGrid::initializeGrid() {
 	y_dims = _env->getGridSizes().second;
 	for (int i=0; i<x_dim; i++) {
 		for (int j=0; j<y_dims[i]; j++) {
-			_control_grid[i][j].varInitialize(i, j, _env, _us);	
+			if (_env->getElement(i,j).getRoomValidity())
+				_control_grid[i][j].varInitialize(i, j, _env, _us);	
 		}
 	} 
 }
@@ -41,11 +37,13 @@ void controllerGrid::converge() {
         y_dims = _env->getGridSizes().second;
 	for (int i=0; i<x_dim; i++) {
                for (int j=0; j<y_dims[i]; j++) {
-                       _control_grid[i][j].calcHeatLevel(i, j, _env, _us);
-                       _control_grid[i][j].setLightLevel(i, j, _env, _us);
-                       _control_grid[i][j].doorLocking(i, j, _env, _us);
-                       _control_grid[i][j].waterOn(i, j, _env, _us);
-               }
+			if (_env->getElement(i,j).getRoomValidity()) {
+       	       			_control_grid[i][j].calcHeatLevel(i, j, _env, _us);
+	                        _control_grid[i][j].setLightLevel(i, j, _env, _us);
+         	                _control_grid[i][j].doorLocking(i, j, _env, _us);
+                 	        _control_grid[i][j].waterOn(i, j, _env, _us);
+               		}
+		}
         } 
 }
 
