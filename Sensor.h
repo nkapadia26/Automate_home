@@ -8,14 +8,14 @@ using namespace std;
 
 class Sensor {
 protected:
-	int ID;
-	bool status; // up: 1  OR  down: 0
-	int sense_interval; // in seconds
+	int _ID;
+	bool _status; // up: 1  OR  down: 0
 public:
 	Sensor();
-	Sensor(int ID, bool status, int sense_interval);
+	Sensor(int ID, bool status);
 	virtual void printData() const = 0;
-	
+	friend class Parser;
+        friend class Env;	
 };
 
 #endif

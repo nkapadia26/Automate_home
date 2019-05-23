@@ -6,13 +6,11 @@
 using namespace std;
 
 Sensor::Sensor() {
-	ID = 0;
-	status = 1;
-	sense_interval = 10;
+	_ID = 0;
+	_status = 1;
 }
-Sensor::Sensor(int ID, bool status, int sense_interval) {
-	this->ID = ID;
-	this->status = status;
-	this->sense_interval = sense_interval;
+Sensor::Sensor(int ID, bool status) {
+	_ID = ID;
+	_status = status;
 }
 

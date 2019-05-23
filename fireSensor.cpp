@@ -6,16 +6,24 @@
 using namespace std;
 
 fireSensor::fireSensor() : Sensor() {
-       triggered = 0;
+       _triggered = 0;
 }
 
-fireSensor::fireSensor(int ID, bool status, int sense_interval, bool triggered) :
-                Sensor(ID, status, sense_interval) {
-        this->triggered = triggered;
+fireSensor::fireSensor(int ID, bool status, bool triggered) :
+                Sensor(ID, status) {
+        _triggered = triggered;
+}
+
+bool fireSensor::getTrigger() {
+	return _triggered;
+}
+
+void fireSensor::setTrigger(bool triggered) {
+	_triggered = triggered;
 }
 
 void fireSensor::printData() const {
-        cout << "Fire Sensor Data -- " << "ID: " << ID << ", STATUS: " << status << ", SenseInterval: " << sense_interval <<
-                " -- triggered: " << triggered << endl;
+        cout << "Fire Sensor Data -- " << "ID: " << _ID << ", STATUS: " << _status << 
+                " -- triggered: " << _triggered << endl;
 }
 

@@ -6,17 +6,19 @@
 using namespace std;
 
 tempSensor::tempSensor() : Sensor() {
-	temperature = 70.0;
+	_temperature = 70.0;
 }
 
-tempSensor::tempSensor(int ID, bool status, int sense_interval, double temperature1) : 
-        	Sensor(ID, status, sense_interval) {
-	temperature = temperature1;
+tempSensor::tempSensor(int ID, bool status, double temperature1) : 
+        	Sensor(ID, status) {
+	_temperature = temperature1;
 }
 
+void tempSensor::setTemp(double temp) { _temperature = temp; }
+double tempSensor::getTemp() { return _temperature; }
 void tempSensor::printData() const {
-        cout << "Temperature Sensor Data -- " << "ID: " << ID << ", STATUS: " << status << ", SenseInterval: " << sense_interval <<
-		" -- temperature " << temperature << endl;
+        cout << "Temperature Sensor Data -- " << "ID: " << _ID << ", STATUS: " << _status << ", SenseInterval: " << _sense_interval <<
+		" -- temperature " << _temperature << endl;
 }
 
 
